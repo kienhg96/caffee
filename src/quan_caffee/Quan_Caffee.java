@@ -5,7 +5,9 @@
  */
 package quan_caffee;
 
+import controller.DrinkCTL;
 import controller.LoginCTL;
+import controller.TableCTL;
 import models.Database;
 import utils.Event;
 import views.LoginView;
@@ -29,9 +31,12 @@ public class Quan_Caffee {
             java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
+    
     public static void main(String[] args) {
         initGUI();
         Database.initialize();
         new LoginCTL();
+//        new TableCTL();
+//        new DrinkCTL();
     }
 }

@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -49,15 +50,13 @@ public class Drink {
     public boolean save() {
         Connection conn = Database.getConnection();
         try {
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT name FROM drink WHERE name LIKE ?");
-            stmt.setString(1, name);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            PreparedStatement stmt;
+            if (id != 0) {
                 stmt = conn.prepareStatement(
-                        "UPDATE drink SET price = ? WHERE name LIKE ?");
+                        "UPDATE drink SET price = ?, name = ? WHERE id = ?");
                 stmt.setInt(1, price);
                 stmt.setString(2, name);            
+                stmt.setInt(3, id);            
                 stmt.executeUpdate();
             } else {
                 stmt = conn.prepareStatement(
@@ -84,36 +83,14 @@ public class Drink {
         Connection conn = Database.getConnection();
         try {
             PreparedStatement stmt = conn.prepareStatement(
-                    "DELETE FROM drink WHERE name LIKE ?");
-            stmt.setString(1, name);
+                    "DELETE FROM drink WHERE id = ?");
+            stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
-    }
-    
-    public static Drink findByName(String name) {
-        Connection conn = Database.getConnection();
-        Drink t = new Drink();
-        try {
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT * FROM drink WHERE name LIKE ?");
-            stmt.setString(1, name);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                t.id = rs.getInt("id");
-                t.name = rs.getString("name");
-                t.price = rs.getInt("price");
-            }
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-            return null;
-        }
-        return t;
     }
     
     public static Drink findById(int id) {
@@ -139,6 +116,29 @@ public class Drink {
         }
         return t;
     }
+    
+    public static ArrayList<Drink> getAll() {
+        ArrayList<Drink> result = new ArrayList<>();
+        Connection conn = Database.getConnection();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT * FROM drink");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Drink t = new Drink();
+                t.id = rs.getInt("id");
+                t.name = rs.getString("name");
+                t.price = rs.getInt("price");
+                result.add(t);
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return result;
+    }
+    
     public static void main(String[] args) {
         Database.initialize();
         Drink d = Drink.findById(3);

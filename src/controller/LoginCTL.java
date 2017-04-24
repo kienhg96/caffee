@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 import models.Employee;
 import models.Manager;
 import utils.Event;
-import utils.Handler;
 import views.LoginView;
 
 /**
@@ -34,9 +33,8 @@ public class LoginCTL {
             if (manager != null) {
                 if (manager.getPassword().equals(password)) {
                     // Change here
-                    JOptionPane.showMessageDialog(loginView, 
-                        "Đăng nhập thành công", "Thông báo", 
-                            JOptionPane.INFORMATION_MESSAGE);
+                    this.loginView.dispose();
+                    new MainManagerCTL();
                 } else {
                     JOptionPane.showMessageDialog(loginView, 
                         "Mật khẩu không đúng", "lỗi", 
@@ -52,9 +50,8 @@ public class LoginCTL {
             if (employee != null) {
                 if (employee.getPassword().equals(password)) {
                     // Change here
-                    JOptionPane.showMessageDialog(loginView, 
-                        "Đăng nhập thành công", "Thông báo", 
-                            JOptionPane.INFORMATION_MESSAGE);
+                    this.loginView.dispose();
+                    new MainEmployeeCTL();
                 } else {
                     JOptionPane.showMessageDialog(loginView, 
                         "Mật khẩu không đúng", "lỗi", 

@@ -28,10 +28,20 @@ CREATE TABLE drink (
     price INT NOT NULL
 );
 
-ALTER TABLE tables ADD COLUMN billId INT;
+alter table tables add column billId INT;
 
 CREATE TABLE bill (
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     createdDate DATE NOT NULL
 );
 
+CREATE TABLE billcontent (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    billId INT NOT NULL,
+    drinkId INT NOT NULL,
+    quantity INT NOT NULL,
+    constraint fk_billcontent_bill foreign key (billId) references bill(id) ON DELETE CASCADE,
+    constraint fk_billcontent_drink foreign key (drinkId) references drink(id) ON DELETE CASCADE
+);
+
+alter table bill modify createdDate DATETIME;

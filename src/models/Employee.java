@@ -30,6 +30,14 @@ public class Employee {
         this.password = "";
     }
 
+    public Employee(String name, String phone, String address, String username, String password) {
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.username = username;
+        this.password = password;
+    }
+
     public String getName() {
         return name;
     }
@@ -131,6 +139,7 @@ public class Employee {
         try {
             PreparedStatement stmt = conn.prepareStatement(
                     "DELETE FROM employee WHERE username = ?");
+            stmt.setString(1, username);
             stmt.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
